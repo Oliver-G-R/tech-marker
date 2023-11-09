@@ -27,21 +27,21 @@ model User {
 }
 
 model TagProduct {
-  id      String    @id @default(uuid())
+  id      String @id @default(uuid())
   tagName String
-  Product Product[]
+
+  Product   Product? @relation(fields: [productId], references: [id])
+  productId String?
 }
 
 model Product {
-  id     String     @id @default(uuid())
-  tags   TagProduct @relation(fields: [tagProductId], references: [id])
-  imgUrl String
-  name   String
-
-  tagProductId String
-  UserProduct  UserProduct[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  id          String        @id @default(uuid())
+  tags        TagProduct[]
+  imgUrl      String
+  name        String
+  UserProduct UserProduct[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 }
 
 model UserProduct {
