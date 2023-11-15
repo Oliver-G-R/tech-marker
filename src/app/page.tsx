@@ -1,6 +1,6 @@
-import { CardProduct } from "./components/CardProduct";
-import { HeaderNav } from "./components/HeaderNav";
-import { SectionProduct } from "./components/SectionProduct";
+import { CardProduct } from "../components/CardProduct";
+import { HeaderNav } from "../components/HeaderNav";
+import { SectionProduct } from "../components/SectionProduct";
 
 export default function Home() {
   const products = [

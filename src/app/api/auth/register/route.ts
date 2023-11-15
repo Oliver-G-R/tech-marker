@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { prisma } from '../../../../prisma/index';
+import { prisma } from '../../../../../prisma/index';
 import { UserFormBasic } from '@/models/User';
 
 export async function POST(req: Request){
