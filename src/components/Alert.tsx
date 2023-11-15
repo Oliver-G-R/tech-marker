@@ -6,10 +6,13 @@ interface AlertProps{
 }
 export const Alert = ({typeAlert, message = "Hola"}:AlertProps) => {
 
-  const [showAlert, setShowAlert] = useState<boolean>(true)
+  const [showAlert, setShowAlert] = useState<boolean>(false)
 
   useEffect(() => {
     let timeout: NodeJS.Timeout
+
+    console.log("message", message)
+    setShowAlert(true)
 
     if(message){
       timeout = setTimeout(() => {

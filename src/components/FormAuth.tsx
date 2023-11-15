@@ -1,8 +1,11 @@
+"use client";
 import { UserFormBasic } from "@/models/User"
 import { ChangeEvent, useState } from "react"
 import { FaMailBulk, FaUser, FaUserSecret } from "react-icons/fa"
+import { signIn } from 'next-auth/react'
 import servicesAuth from "@/services/auth"
 import { Alert } from "./Alert"
+import { useRouter } from "next/navigation";
 
 interface FormAuthProps{
   typeForm: 'login' | 'register'
@@ -15,7 +18,11 @@ export const FormAuth = ({ typeForm}:FormAuthProps) => {
     password: ''
   }
 
-  const [errorAuth, setErrorAuth] = useState<string | null>(null)
+  const router = useRouter()
+  const [authMessage, setAuthMessage] = useState<{
+    message: string | null
+    typeAlert: 'success' | 'error'
+  }>()
 
   const [inputValues, setInputValues] = useState<UserFormBasic>(defaultInputValues)
 
@@ -30,23 +37,54 @@ export const FormAuth = ({ typeForm}:FormAuthProps) => {
 
   const handleSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if(typeForm === "register"){
-      const resp = await servicesAuth.SigUp(inputValues)
-      if(resp.status !== 201){
-        setErrorAuth(resp.error)
-      }
-    }else{
 
+    if(typeForm === "register"){
+      //register
+      const resp = await servicesAuth.SigUp(inputValues)
+
+      if(resp.status !== 201){
+        setAuthMessage({
+          message: resp.error,
+          typeAlert: 'error'
+        })
+      }else{
+        console.log("first")
+        setTimeout(() => {
+          setAuthMessage({
+            message: "Usuario creado correctamente",
+            typeAlert: 'success'
+          })
+        }, 3000);
+      }
+
+    }else{
+      // login
+      const resp = await signIn('credentials', {
+        redirect: false,
+        email: inputValues.email,
+        password: inputValues.password
+      })
+
+      if(resp?.status === 200){
+        router.push('/')
+      }else{
+        setAuthMessage({
+          message: resp?.error || "Error al iniciar sesión",
+          typeAlert: 'error'
+        })
+      }
+
+      console.log("resp", resp)
     }
   }
 
   return (
       <>
-        {errorAuth && <Alert
-          typeAlert={errorAuth ? 'error' : 'success'}
-          message={errorAuth}
-        />}
-
+       {authMessage?.message &&  <Alert
+          typeAlert={authMessage?.typeAlert ? 'error' : 'success'}
+          message={authMessage?.message}
+        />
+}
         <form onSubmit={(e) => handleSubmit(e)} className="mt-5  flex gap-4 flex-col items-center justify-center w-[70%]">
             {typeForm === "register" && <div className="flex flex-row-reverse gap-4 items-center w-[100%]">
               <input 

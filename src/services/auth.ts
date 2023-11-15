@@ -24,7 +24,7 @@ const SigUp = async (user: UserFormBasic ) => {
     
   } catch (error: any) {
     return{
-      error: error.message
+      error: error.message,
     }
   }
 }

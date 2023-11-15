@@ -1,9 +1,5 @@
-"use client";
-
 import { FormAuth } from "@/components/FormAuth";
 import Link from "next/link";
-import { FormEvent } from "react";
-
 export default function SignIn () {
   return (
       <main className="global-container">

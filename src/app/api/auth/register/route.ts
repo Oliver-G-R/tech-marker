@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import { prisma } from '../../../../../prisma/index';
 import { UserFormBasic } from '@/models/User';
+import { Hash } from '@/utilities/Hash';
 
 export async function POST(req: Request){
   const { email, name, password:passwordUser } = await req.json() as UserFormBasic
@@ -20,11 +21,13 @@ export async function POST(req: Request){
       return NextResponse.json({message: 'El usuario ya existe'}, {status: 400})
     }
 
+    const passwordHash = await Hash.make(passwordUser)
+
     const user = await prisma.user.create({
       data: {
         email,
         name,
-        password: passwordUser
+        password: passwordHash
       }
     })
 
@@ -34,7 +37,6 @@ export async function POST(req: Request){
 
 
   } catch (error) {
-    console.log(error)
     return NextResponse.json({message: 'Error en el servidor'}, {status: 500})
   }
 }
