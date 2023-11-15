@@ -1,6 +1,16 @@
 import { FormAuth } from "@/components/FormAuth";
+import { getServerSession } from "next-auth/next";
 import Link from "next/link";
-export default function SignIn () {
+import { redirect } from "next/navigation";
+
+import { authOptions } from "../api/auth/[...nextauth]/route";
+export default async function SignIn () {
+  const session = await getServerSession(authOptions)
+  const userData = session?.user 
+
+  if(userData?.user){
+    redirect('/')
+  }
   return (
       <main className="global-container">
         <div className="mt-[100px] flex  flex-col items-center justify-center">

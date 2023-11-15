@@ -48,13 +48,13 @@ export const FormAuth = ({ typeForm}:FormAuthProps) => {
           typeAlert: 'error'
         })
       }else{
-        console.log("first")
         setTimeout(() => {
           setAuthMessage({
             message: "Usuario creado correctamente",
             typeAlert: 'success'
           })
         }, 3000);
+        router.push('/')
       }
 
     }else{
@@ -66,7 +66,7 @@ export const FormAuth = ({ typeForm}:FormAuthProps) => {
       })
 
       if(resp?.status === 200){
-        router.push('/')
+        router.push('/DashBoard')
       }else{
         setAuthMessage({
           message: resp?.error || "Error al iniciar sesión",

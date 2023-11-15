@@ -28,16 +28,37 @@ export const authOptions = {
         if (!matchPassword) throw new Error('Usario o contraseña incorrecta')
 
         return {
-            id: userFound.id,
-            role: userFound.role,
-            email: userFound.email,
+          email: userFound.email,
         }
       },
     }),
   ],
   pages: {
     signIn: "/SignIn",
-  }
+  },
+
+  callbacks: {
+    session: async (session:any) => {
+
+      const email = session.session.user.email
+      const user = await prisma.user.findUnique({
+        where: {
+          email
+        },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          role: true,
+        }
+      })
+
+      session.user = user
+
+      return Promise.resolve(session);
+    }
+  },
+
 };
 
 const handler = NextAuth(authOptions);

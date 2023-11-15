@@ -13,6 +13,12 @@ export interface User {
   password: string
 }
 
+export interface userDataCookie {
+  id: string
+  role: USER_ROLE
+  email: string
+}
+
 export interface FullUser extends User{
   createdAt: Date 
   updatedAt: Date
