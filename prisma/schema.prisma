@@ -26,19 +26,12 @@ model User {
   updatedAt   DateTime      @updatedAt
 }
 
-model TagProduct {
-  id      String @id @default(uuid())
-  tagName String
-
-  Product   Product? @relation(fields: [productId], references: [id])
-  productId String?
-}
-
 model Product {
   id          String        @id @default(uuid())
-  tags        TagProduct[]
   imgUrl      String
   name        String
+  description String
+  price       Decimal       @db.Decimal(10, 2)
   UserProduct UserProduct[]
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
